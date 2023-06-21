@@ -1,0 +1,9 @@
+{% if lista_animali %}
+    <ul>
+        {% for animali in lista_animali %}
+            <li> {{ animali.specie }} </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>non ci sono animali</p>
+{% endif %}

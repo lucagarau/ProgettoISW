@@ -1,3 +1,4 @@
+from random import choice
 from django.db import models
 from enum import Enum
 
@@ -17,16 +18,16 @@ class Utente(models.Model):
 
 
 class StatoAdozione(Enum):
-    nonAdottato = 0
-    adottato = 1
-    inAttesaConferma = 2
+    ADOTTATO = 'adottato'
+    NON_ADOTTATO = 'non adottato'
+    IN_ATTESA = 'in attesa di conferma'
     
 class Animale(models.Model):
     specie = models.CharField(max_length = 32)
     razza = models.CharField(max_length = 32)
     eta = models.IntegerField(default = 0)
     descrizione = models.CharField(max_length = 128)
-    stato = StatoAdozione
+    stato = models.CharField(max_length=32,choices=[(choice.name,choice.value) for choice in StatoAdozione],default=StatoAdozione.NON_ADOTTATO.value)
 
     def __str__(self):
         return self.specie + self.razza + str(self.eta) + self.descrizione

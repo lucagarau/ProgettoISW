@@ -12,3 +12,7 @@ def home(request):
         "lista_animali" : lista_animali,
     }
     return HttpResponse(template.render(context,request))
+
+def login(request):
+    template = loader.get_template("registrazione/login.html")
+    return HttpResponse(template.render({},request))

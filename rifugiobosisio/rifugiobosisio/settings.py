@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rifugioAnimali.apps.RifugioanimaliConfig'
+    'rifugioAnimali.apps.RifugioanimaliConfig',
+    'bootstrap5'
 ]
 
 MIDDLEWARE = [
@@ -55,7 +56,7 @@ ROOT_URLCONF = 'rifugiobosisio.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "rifugioAnimali/templates/registrazione"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

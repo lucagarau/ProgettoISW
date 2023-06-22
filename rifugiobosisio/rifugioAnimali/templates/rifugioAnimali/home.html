@@ -13,53 +13,68 @@
     
 
 
-    <header>
-        <h1>Benvenuto nel rifugio del Gatto bosisio</h1>
-        
-        <nav class="navbar">
-            <div class="">
-                <ul class="navbar-nav d-flex">
-                    <li class="nav-item">Filtra</li>
-                    <li class="nav-item">Logout</li>
-             </ul>
-            </div>
-        </nav>
+    <header class="p-3 mb-2 bg-secondary bg-gradient text-white">
+        <h1 class="justify-content-md-center">Benvenuto nel rifugio del Gatto bosisio</h1>
+            <!--Logout-->
+            <a class="justify-content-end btn btn-primary" href="#" role="button">Logout</a>
+        </div>
     </header>
 
-    {% if lista_animali %}
-    <!-- <ul>
-            {% for animali in lista_animali %}
-                <li> {{ animali.specie }} </li>
-            {% endfor %}
-        </ul>-->
+        <!--Dropdown Filtra-->
+        <div class="p-3 btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            Filtra
+            </button>
+            <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Separated link</a></li>
+            </ul>
+        </div>
 
-        
-        <div class="p-4">
-        <table class="table table-bordered table-sm table-responsive">
-            <thead>
-                <tr class="table-primary">
-                    <th>Specie</th>
-                    <th>Razza</th>
-                    <th>Età</th>
-                    <th>descrizione</th>
-                    <th>Azione</th>
-                </tr>
-            </thead>
-            <tbody>
+    
+
+
+        <!--INIZIO NONTOCCARE-->
+        {% if lista_animali %}
+        <!-- <ul>
                 {% for animali in lista_animali %}
-                    <tr class="table-light">
-                        <td>{{ animali.specie }}</td>
-                        <td>{{ animali.razza }}</td>
-                        <td>{{ animali.eta }}</td>
-                        <td>{{ animali.descrizione }}</td>
-                        <td>Da cambiare</td> 
-                        
-                    </tr>
+                    <li> {{ animali.specie }} </li>
                 {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>non ci sono animali</p>
-    {% endif %}
-</div>
+            </ul>-->
+
+            
+            <div class="p-4">
+            <table class="table table-bordered table-sm table-responsive">
+                <thead>
+                    <tr class="table-primary">
+                        <th>Specie</th>
+                        <th>Razza</th>
+                        <th>Età</th>
+                        <th>descrizione</th>
+                        <th>Azione</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% for animali in lista_animali %}
+                        <tr class="table-light">
+                            <td>{{ animali.specie }}</td>
+                            <td>{{ animali.razza }}</td>
+                            <td>{{ animali.eta }}</td>
+                            <td>{{ animali.descrizione }}</td>
+                            <td>Da cambiare</td> 
+                            
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        {% else %}
+            <p>non ci sono animali</p>
+        {% endif %}
+        <!--FINE NONTOCCARE-->
+
 </body>

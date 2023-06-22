@@ -56,7 +56,7 @@ ROOT_URLCONF = 'rifugiobosisio.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "rifugioAnimali/templates/registrazione"],
+        'DIRS': [BASE_DIR / "rifugioAnimali/templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

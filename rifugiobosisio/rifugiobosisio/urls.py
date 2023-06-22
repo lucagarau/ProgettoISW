@@ -20,7 +20,8 @@ from rifugioAnimali import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path("accounts/",include("django.contrib.auth.urls")),
-    path("login/",views.login,name="login"),
+    path("accounts/",include("django.contrib.auth.urls")),
+    #path("login/",views.login,name="login"),
     path("",views.home,name="home"),
+    path("modulo_adozione/<int:animali_id>/",views.modulo_adozione,name="modulo_adozione"),
 ]

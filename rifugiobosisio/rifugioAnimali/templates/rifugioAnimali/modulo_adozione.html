@@ -1,0 +1,53 @@
+<head>
+    {% load static %}
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <title>Modulo di adozione</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>Modulo di adozione</h1>
+    </header>
+
+    <button>Home</button>
+    {% if animale_da_adottare%}
+    <h3>animale da adottare</h3>
+    <div> 
+            <p>Specie: {{ animale_da_adottare.specie }}</p>
+            <p>Razza: {{ animale_da_adottare.razza }}</p>
+            <p>Età: {{ animale_da_adottare.eta }}</p>
+            <p>Descrizione: {{ animale_da_adottare.descrizione }}</p>
+    </div>
+
+    <div>
+        <form action="" method="post">
+            <legend>Adotta:</legend>
+            <hr>
+            <div>
+                <input type="text" name="nomeCognome" id="adotta_nome" placeholder="Nome e Cognome" />
+            </div>
+
+            <div>
+                <input type="text" name="indirizzo" id="adotta_indirizzo" placeholder="Indirizzo" />
+            </div>
+
+            <div>
+                <input type="text" name="recapito" id="adotta_recapito" placeholder="Email/telefono" />
+            </div>
+
+            <div>
+                <input type="submit" name="adotta" id="adotta" placeholder="Invia Modulo" />
+            </div>
+
+    </form>
+    </div>
+    {% else %}
+    <h3>nessun animale da adottare</h3>
+    {% endif %}
+    
+    
+</body>

@@ -16,3 +16,11 @@ def home(request):
 def login(request):
     template = loader.get_template("registrazione/login.html")
     return HttpResponse(template.render({},request))
+
+def modulo_adozione(request,animali_id):
+    animale_da_adottare = Animale.objects.get(id=animali_id)
+    template = loader.get_template("rifugioAnimali/modulo_adozione.html")
+    context = {
+        "animale_da_adottare" : animale_da_adottare,
+    }
+    return HttpResponse(template.render(context,request))

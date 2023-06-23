@@ -13,7 +13,7 @@
         <h1>Modulo di adozione</h1>
     </header>
 
-    <button>Home</button>
+    <button onclick="location.href = '/home'">Home</button>
     {% if animale_da_adottare%}
     <h3>animale da adottare</h3>
     <div> 
@@ -24,8 +24,11 @@
     </div>
 
     <div>
-        <form action="" method="post">
+        <form action="{% url 'invio_modulo_adozione' animale_da_adottare.id %}" method="post">
+            {% csrf_token %}
+            <fieldset>
             <legend>Adotta:</legend>
+            {% if error_message %} <p><strong>{{error_message}}</strong></p> {% endif %}
             <hr>
             <div>
                 <input type="text" name="nomeCognome" id="adotta_nome" placeholder="Nome e Cognome" />
@@ -42,6 +45,7 @@
             <div>
                 <input type="submit" name="adotta" id="adotta" placeholder="Invia Modulo" />
             </div>
+            </fieldset>
 
     </form>
     </div>

@@ -1,9 +1,12 @@
 <head>
-    <title>Rifugio del Gatto Bosisio</title>
+    <title>Rifugio del Gatto Bosisio - admim</title>
     {% load static %}
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    
+
+    
 </head>
 
 <body>
@@ -31,11 +34,12 @@
             </ul>
         </div>
 
+        <h3>Lista Richieste</h3>
     
 
 
         <!--INIZIO NONTOCCARE-->
-        {% if lista_animali %}
+        {% if lista_moduli %}
         <!-- <ul>
                 {% for animali in lista_animali %}
                     <li> {{ animali.specie }} </li>
@@ -47,22 +51,26 @@
             <table class="table table-bordered table-sm table-responsive">
                 <thead>
                     <tr class="table-primary">
-                        <th>Specie</th>
-                        <th>Razza</th>
-                        <th>Età</th>
-                        <th>descrizione</th>
+                        <th>Richiedente</th>
+                        <th>Indirizzo</th>
+                        <th>Recapito</th>
+                        <th>Specie Animale</th>
+                        <th>Razza Animale</th>
+                        <th>Età Animale</th>
                         <th>Azione</th>
                     </tr>
                 </thead>
                 
                 <tbody>
-                    {% for animali in lista_animali %}
+                    {% for modulo_adozione in lista_moduli %}
                         <tr class="table-light">
-                            <td>{{ animali.specie }}</td>
-                            <td>{{ animali.razza }}</td>
-                            <td>{{ animali.eta }}</td>
-                            <td>{{ animali.descrizione }}</td>
-                            <td><a href="/modulo_adozione/{{ animali.id }}/">Adotta</a></td> 
+                            <td>{{ modulo_adozione.nomeCognome }}</td>
+                            <td>{{ modulo_adozione.indirizzo }}</td>
+                            <td>{{ modulo_adozione.recapito }}</td>
+                            <td>{{ modulo_adozione.animale.specie }}</td>
+                            <td>{{ modulo_adozione.animale.razza }}</td>
+                            <td>{{ modulo_adozione.animale.eta }}</td>
+                            <td><a href="">Da Camabiare</a></td> 
                             
                         </tr>
                     {% endfor %}
@@ -70,7 +78,7 @@
 
             </table>
         {% else %}
-            <p>non ci sono animali</p>
+            <p>non ci sono richieste</p>
         {% endif %}
         <!--FINE NONTOCCARE-->
 

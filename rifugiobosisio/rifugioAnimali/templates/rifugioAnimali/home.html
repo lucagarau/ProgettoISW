@@ -19,16 +19,38 @@
 
         <!--Dropdown Filtra-->
         <div class="p-3 btn-group">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            Filtra
-            </button>
-            <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Separated link</a></li>
-            </ul>
+          <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          Filtra
+          </button>
+          <ul class="dropdown-menu" style="min-width:300px;">
+          <li><nav class="navbar bg-body-tertiary">
+              <div class="container-fluid">
+                <form class="d-flex" role="search">
+                  <!--input e bottone Eta-->  
+                  <input class="form-control me-2" type="ageSearch" placeholder="Età" aria-label="Età">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+              </div>
+            </nav></li>
+          <li><nav class="navbar bg-body-tertiary">
+              <div class="container-fluid">
+                <form class="d-flex" role="search">
+                  <!--input e bottone Specie-->
+                  <input class="form-control me-2" type="speciesSearch" placeholder="Specie" aria-label="Specie">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+              </div>
+            </nav></li>
+          <li><nav class="navbar bg-body-tertiary">
+              <div class="container-fluid">
+                <form class="d-flex" role="search">
+                  <!--input e bottone Razza-->
+                  <input class="form-control me-2" type="raceSearch" placeholder="Razza" aria-label="Razza">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+              </div>
+            </nav></li>
+          </ul>
         </div>
 
     

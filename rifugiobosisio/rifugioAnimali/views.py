@@ -1,10 +1,26 @@
 from django.shortcuts import render, get_object_or_404,redirect
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template import loader
 from .models import Animale, ModuloAdozione
+from .forms import CreateUserForm
 from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
+
+def registerPage(request):
+
+    form = CreateUserForm()
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+
+    context = {'form':form}
+    template = loader.get_template("registration/registrazione.html")
+    return HttpResponse(template.render(context,request))
 
 def home(request):
     lista_animali = Animale.objects.order_by("specie")

@@ -26,6 +26,7 @@ urlpatterns = [
     path("home/",views.home,name="home"),
     path("home_admin/",views.home_admin,name="home_admin"),
     path("login/",views.logIn,name="login"),
+    path("registrazione/",views.registerPage,name="registrazione"),
     path("modulo_adozione/<int:animali_id>/",views.modulo_adozione,name="modulo_adozione"),
     path("invio_modulo_adozione/<int:animali_id>",views.invio_modulo_adozione,name="invio_modulo_adozione"),
 ]

@@ -36,6 +36,7 @@ def home_admin(request):
     #todo: mettere controllo se admin, altrimenti redirect a home
     lista_moduli = ModuloAdozione.objects.order_by("animale")
     template = loader.get_template("rifugioAnimali/home_amministratore.html")
+    
     context = {
         "lista_moduli" : lista_moduli,
     }
@@ -120,6 +121,28 @@ def invio_aggiungi_animale(request):
         })
 
     return redirect('gestione_animali')
+
+
+def gestione_modulo_adozione(request,modulo_id,stato):
+    modulo_da_gestire = ModuloAdozione.objects.get(id=modulo_id)
+    try:
+        if stato == "1":
+            modulo_da_gestire.animale.stato = "ADOTTATO"
+            modulo_da_gestire.animale.save()
+            msg = "Richiesta accettata con successo"
+        elif stato == "0":
+            modulo_da_gestire.animale.stato = "NON_ADOTTATO"
+            modulo_da_gestire.animale.save()
+            msg = "Richiesta rifiutata con successo"
+        else:
+            raise KeyError
+    except (KeyError, ModuloAdozione.DoesNotExist):
+        msg = "Errore nella gestione della richiesta"
+        return redirect('home_admin')
+    
+    modulo_da_gestire.delete()
+    return redirect('home_admin')
+    
 
 
 

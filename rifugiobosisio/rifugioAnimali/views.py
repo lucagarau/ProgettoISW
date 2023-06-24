@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404,redirect
 from django.http import HttpResponse
 from django.template import loader
-from .models import Animale, ModuloAdozione, Utente
+from .models import Animale, ModuloAdozione
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 
@@ -22,9 +23,23 @@ def home_admin(request):
     }
     return HttpResponse(template.render(context,request))
 
-def login(request):
-    template = loader.get_template("registrazione/login.html")
+def logIn(request):
+    if request.method == 'POST':
+        usr = request.POST.get('username')
+        psw = request.POST.get('password')
+        
+        user = authenticate(request, username=usr, password=psw)
+
+        if user is not None and not(user.is_staff):
+            login(request, user)
+            return redirect('home')
+        elif user is not None and user.is_staff:
+            login(request, user)
+            return redirect('home_admin')
+
+    template = loader.get_template("registration/login.html")
     return HttpResponse(template.render({},request))
+
 
 def modulo_adozione(request,animali_id):
     animale_da_adottare = Animale.objects.get(id=animali_id)

@@ -24,6 +24,11 @@ def registerPage(request):
 
 @login_required(login_url='login')
 def home(request):
+
+    #controllo se admin
+    if(request.user.is_staff):
+        return redirect('home_admin')
+    
     lista_animali = Animale.objects.order_by("specie")
     template = loader.get_template("rifugioAnimali/home.html")
     context = {
@@ -33,7 +38,11 @@ def home(request):
 
 @login_required(login_url='login')
 def home_admin(request):
-    #todo: mettere controllo se admin, altrimenti redirect a home
+
+    #controllo se admin
+    if(not(request.user.is_staff)):
+        return redirect('home')
+
     lista_moduli = ModuloAdozione.objects.order_by("animale")
     template = loader.get_template("rifugioAnimali/home_amministratore.html")
     
@@ -59,12 +68,14 @@ def logIn(request):
     template = loader.get_template("registration/login.html")
     return HttpResponse(template.render({},request))
 
+@login_required(login_url='login')
 def logOut(request):
     username = request.user.username
     if username != None:
         logout(request)
         return redirect("/login")
 
+@login_required(login_url='login')
 def modulo_adozione(request,animali_id):
     animale_da_adottare = Animale.objects.get(id=animali_id)
     template = loader.get_template("rifugioAnimali/modulo_adozione.html")
@@ -73,11 +84,9 @@ def modulo_adozione(request,animali_id):
     }
     return HttpResponse(template.render(context,request))
 
+@login_required(login_url='login')
 def invio_modulo_adozione(request,animali_id):
     animale_da_adottare = get_object_or_404(Animale, id=animali_id)
-
-    #utente_loggato = Utente(nome = "gianni", cognome = "fenu", username = "gianni", password = "fenu", admin = False)
-    #utente_loggato.save() #todo:cambiare con id utente loggato
 
     try:
         if request.POST["nomeCognome"] == "" or request.POST["indirizzo"] == "" or request.POST["recapito"] == "":
@@ -96,7 +105,13 @@ def invio_modulo_adozione(request,animali_id):
     return redirect('home')
 
 
+@login_required(login_url='login')
 def gestione_animali(request):
+
+    #controllo se admin
+    if(not(request.user.is_staff)):
+        return redirect('home')
+    
     lista_animali = Animale.objects.order_by("specie")
     template = loader.get_template("rifugioAnimali/gestione_animali.html")
     context = {
@@ -104,12 +119,24 @@ def gestione_animali(request):
     }
     return HttpResponse(template.render(context,request))
 
+@login_required(login_url='login')
 def aggiungi_animale(request):
+    #controllo se admin
+    if(not(request.user.is_staff)):
+        return redirect('home')
+    
     template = loader.get_template("rifugioAnimali/aggiungi_animale.html")
     context = {}
     return HttpResponse(template.render(context,request))
 
+@login_required(login_url='login')
 def invio_aggiungi_animale(request):
+
+    #controllo se admin
+    if(not(request.user.is_staff)):
+        return redirect('home')
+    
+
     try:
         if request.POST["specie"] == "" or request.POST["razza"] == "" or request.POST["eta"] == "" :
             raise KeyError
@@ -123,7 +150,12 @@ def invio_aggiungi_animale(request):
     return redirect('gestione_animali')
 
 
+@login_required(login_url='login')
 def gestione_modulo_adozione(request,modulo_id,stato):
+    #controllo se admin
+    if(not(request.user.is_staff)):
+        return redirect('home')
+    
     modulo_da_gestire = ModuloAdozione.objects.get(id=modulo_id)
     try:
         if stato == "1":
@@ -142,6 +174,7 @@ def gestione_modulo_adozione(request,modulo_id,stato):
     
     modulo_da_gestire.delete()
     return redirect('home_admin')
+
     
 
 

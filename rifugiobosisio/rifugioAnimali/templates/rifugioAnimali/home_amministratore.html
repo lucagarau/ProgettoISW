@@ -26,49 +26,61 @@
     </div>
     <a class="btn btn-primary" href="/logout" role="button">Logout</a>
   </header>
-  
-    <!--Dropdown Filtra-->
-    <div class="p-3 btn-group">
-      <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="filtra">
-      Filtra
-      </button>
-      <ul class="dropdown-menu" style="min-width:300px;">
-      <li><nav class="navbar bg-body-tertiary">
-          <div class="container-fluid">
-            <form class="d-flex" role="search">
-              <!--input e bottone Eta-->  
-              <input class="form-control me-2" type="ageSearch" placeholder="Età" aria-label="Età">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+
+
+    <div class="container" style="width: 100vw;">
+      <div class="row">
+        <div class="col">
+          <div class=" position-absolute start-0 p-3 btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="filtra">Filtra</button>
+            <ul class="dropdown-menu" style="min-width:300px;">
+              <li><nav class="navbar bg-body-tertiary">
+                  <div class="container-fluid">
+                    <form class="d-flex" role="search">
+                      <!--input e bottone Eta-->  
+                      <input class="form-control me-2" type="ageSearch" placeholder="Età" aria-label="Età">
+                      <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                  </div>
+                </nav>
+              </li>
+              <li><nav class="navbar bg-body-tertiary">
+                  <div class="container-fluid">
+                    <form class="d-flex" role="search">
+                      <!--input e bottone Specie-->
+                      <input class="form-control me-2" type="speciesSearch" placeholder="Specie" aria-label="Specie">
+                      <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                  </div>
+                </nav>
+              </li>
+              <li><nav class="navbar bg-body-tertiary">
+                  <div class="container-fluid">
+                    <form class="d-flex" role="search">
+                      <!--input e bottone Razza-->
+                      <input class="form-control me-2" type="raceSearch" placeholder="Razza" aria-label="Razza">
+                      <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                  </div>
+                </nav>
+              </li>
+            </ul>
           </div>
-        </nav></li>
-      <li><nav class="navbar bg-body-tertiary">
-          <div class="container-fluid">
-            <form class="d-flex" role="search">
-              <!--input e bottone Specie-->
-              <input class="form-control me-2" type="speciesSearch" placeholder="Specie" aria-label="Specie">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-          </div>
-        </nav></li>
-      <li><nav class="navbar bg-body-tertiary">
-          <div class="container-fluid">
-            <form class="d-flex" role="search">
-              <!--input e bottone Razza-->
-              <input class="form-control me-2" type="raceSearch" placeholder="Razza" aria-label="Razza">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-          </div>
-        </nav></li>
-      </ul>
+        </div>
+        <div class="col text-center align-content-center">
+          <h2 class="text-center">Lista Richieste</h2>
+        </div>
+        <div class="col">
+          <a href="#" role="button" class=" position-absolute end-0 btn btn-warning m-3" onclick="location.href= '/gestione_animali/' ">Gestisci Animali</a>
+        </div>
+      </div>
     </div>
-    <!-- TODO: - Diego sposta e sistema questo bottone-->
-    <button type="button" class="" onclick="location.href = '/gestione_animali/' ">Gestisci Animali</button>
 
     <div class="row justify-content-center" style="width: 100vw;">
-      <h2 class="text-center">Lista Richieste</h2>
       <h3 class="text-center m-3" id="warning">Non ci sono richieste</h3>
-    </div> 
+    </div>
+
+
         <!--INIZIO NONTOCCARE-->
         {% if lista_moduli %}
                     

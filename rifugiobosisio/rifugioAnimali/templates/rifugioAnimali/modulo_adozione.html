@@ -47,7 +47,36 @@
             </div>
             </fieldset>
 
-    </form>
+         </form>
+         <!--BOOH voglio capire come accedere alla pagina per vederla prima di continuare NON TOCCARE 
+         <div class="container h-100">
+            <div class="form-centrato row h-100 justify-content-center align-items-center">
+              <div class="col-md-6 bg-secondary bg-gradient text-white" id="form-accesso">
+                <h2 class="text-center m-3">Adotta:</h2>
+                <form action="{% url 'invio_modulo_adozione' animale_da_adottare.id %}" method="post">
+                    {% csrf_token %}
+                    <fieldset>
+                    {% if error_message %} <p><strong>{{error_message}}</strong></p> {% endif %}
+                  <div class="form-group">
+                    <label for="adotta_nome">Nome e Cognome</label>
+                    <input type="text" class="form-control" id="adotta_nome" placeholder="Nome e Cognome">
+                  </div>
+                  <div class="form-group">
+                    <label for="adotta_indirizzo">Indirizzo</label>
+                    <input type="text" class="form-control" id="adotta_indirizzo" placeholder="Indirizzo">
+                  </div>
+                  <div class="form-group">
+                    <label for="adotta_recapito">Nome e Cognome</label>
+                    <input type="text" class="form-control" id="adotta_recapito" placeholder="Email o Telefono">
+                  </div>
+                  <div class="form-group text-center">
+                    <button type="submit" name="adotta" id="adotta" class="btn btn-primary m-3">Accedi</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+        </div>-->
+
     </div>
     {% else %}
     <h3>nessun animale da adottare</h3>

@@ -3,62 +3,69 @@
     {% load static %}
     {% load bootstrap5 %}
     {% bootstrap_css %}
-    {% bootstrap_javascript %}
-    
+    <style>
 
-    
+      #titolo{
+        width: 100vw;
+      }
+
+      .hide-disabled{
+        display: none;
+      }
+    </style>
+    {% bootstrap_javascript %}
 </head>
 
 <body>
     
 
 
-    <header class="p-3 mb-2 bg-secondary bg-gradient text-white d-flex">
-        <h1 class="align-items-center">Benvenuto nel rifugio del Gatto bosisio</h1>
-            <!--Logout-->
-        <a class=" m-2 position-absolute end-0 btn btn-primary" href="/logout" role="button">Logout</a>
-      </header>
+  <header class="p-3 mb-2 bg-secondary bg-gradient text-white d-flex">
+    <div class="row h-100 justify-content-center align-items-center" id="titolo">
+      <h1 class="text-center m-3">Benvenuto nel rifugio del Gatto bosisio</h1>
+    </div>
+    <a class="btn btn-primary" href="#" role="button">Logout</a>
+  </header>
   
-          <!--Dropdown Filtra-->
-          <div class="p-3 btn-group">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            Filtra
-            </button>
-            <ul class="dropdown-menu" style="min-width:300px;">
-            <li><nav class="navbar bg-body-tertiary">
-                <div class="container-fluid">
-                  <form class="d-flex" role="search">
-                    <!--input e bottone Eta-->  
-                    <input class="form-control me-2" type="ageSearch" placeholder="Età" aria-label="Età">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                  </form>
-                </div>
-              </nav></li>
-            <li><nav class="navbar bg-body-tertiary">
-                <div class="container-fluid">
-                  <form class="d-flex" role="search">
-                    <!--input e bottone Specie-->
-                    <input class="form-control me-2" type="speciesSearch" placeholder="Specie" aria-label="Specie">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                  </form>
-                </div>
-              </nav></li>
-            <li><nav class="navbar bg-body-tertiary">
-                <div class="container-fluid">
-                  <form class="d-flex" role="search">
-                    <!--input e bottone Razza-->
-                    <input class="form-control me-2" type="raceSearch" placeholder="Razza" aria-label="Razza">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                  </form>
-                </div>
-              </nav></li>
-            </ul>
+    <!--Dropdown Filtra-->
+    <div class="p-3 btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="filtra">
+      Filtra
+      </button>
+      <ul class="dropdown-menu" style="min-width:300px;">
+      <li><nav class="navbar bg-body-tertiary">
+          <div class="container-fluid">
+            <form class="d-flex" role="search">
+              <!--input e bottone Eta-->  
+              <input class="form-control me-2" type="ageSearch" placeholder="Età" aria-label="Età">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
           </div>
-
-        <!-- TODO: - Diego sposta e sistema questo bottone-->
-        <button type="button" class="" onclick="location.href = '/gestione_animali/' ">Gestisci Animali</button>
-
-        <h3>Lista Richieste</h3>
+        </nav></li>
+      <li><nav class="navbar bg-body-tertiary">
+          <div class="container-fluid">
+            <form class="d-flex" role="search">
+              <!--input e bottone Specie-->
+              <input class="form-control me-2" type="speciesSearch" placeholder="Specie" aria-label="Specie">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </nav></li>
+      <li><nav class="navbar bg-body-tertiary">
+          <div class="container-fluid">
+            <form class="d-flex" role="search">
+              <!--input e bottone Razza-->
+              <input class="form-control me-2" type="raceSearch" placeholder="Razza" aria-label="Razza">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </nav></li>
+      </ul>
+    </div>
+    <div class="row justify-content-center" style="width: 100vw;">
+      <h2 class="text-center">Lista Richieste</h2>
+      <h3 class="text-center m-3" id="warning">Non ci sono richieste</h3>
+    </div>
     
 
 
@@ -95,8 +102,22 @@
                 </tbody>
 
             </table>
+            <script>
+              //Attiva il pulsante filtra quando ci sono animali
+              //TODO da testare in caso prima non ci siano richieste e poi ci siano e viceversa
+              var filtra = document.getElementById('filtra');
+              var message = document.getElementById('warning');
+              message.classList.add('hide-disabled');
+              filtra.classList.remove('hide-disabled');
+            </script>
         {% else %}
-            <p>non ci sono richieste</p>
+          <script>
+            //Disattiva il pulsante filtra quando non ci sono richieste
+            var filtra = document.getElementById('filtra');
+            var message = document.getElementById('warning');
+            message.classList.remove('hide-disabled');
+            filtra.classList.add('hide-disabled');
+          </script>
         {% endif %}
         <!--FINE NONTOCCARE-->
 

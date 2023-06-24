@@ -16,7 +16,7 @@
     <header class="p-3 mb-2 bg-secondary bg-gradient text-white d-flex">
         <h1 class="align-items-center">Benvenuto nel rifugio del Gatto bosisio</h1>
             <!--Logout-->
-        <a class=" m-2 position-absolute end-0 btn btn-primary" href="#" role="button">Logout</a>
+        <a class=" m-2 position-absolute end-0 btn btn-primary" href="/logout" role="button">Logout</a>
       </header>
   
           <!--Dropdown Filtra-->
@@ -61,13 +61,7 @@
 
         <!--INIZIO NONTOCCARE-->
         {% if lista_moduli %}
-        <!-- <ul>
-                {% for animali in lista_animali %}
-                    <li> {{ animali.specie }} </li>
-                {% endfor %}
-            </ul>-->
-
-            
+                    
             <div class="p-4">
             <table class="table table-bordered table-sm table-responsive">
                 <thead>

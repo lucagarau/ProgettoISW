@@ -22,6 +22,7 @@ def registerPage(request):
     template = loader.get_template("registration/registrazione.html")
     return HttpResponse(template.render(context,request))
 
+@login_required(login_url='login')
 def home(request):
     lista_animali = Animale.objects.order_by("specie")
     template = loader.get_template("rifugioAnimali/home.html")
@@ -30,6 +31,7 @@ def home(request):
     }
     return HttpResponse(template.render(context,request))
 
+@login_required(login_url='login')
 def home_admin(request):
     #todo: mettere controllo se admin, altrimenti redirect a home
     lista_moduli = ModuloAdozione.objects.order_by("animale")
@@ -56,6 +58,11 @@ def logIn(request):
     template = loader.get_template("registration/login.html")
     return HttpResponse(template.render({},request))
 
+def logOut(request):
+    username = request.user.username
+    if username != None:
+        logout(request)
+        return redirect("/login")
 
 def modulo_adozione(request,animali_id):
     animale_da_adottare = Animale.objects.get(id=animali_id)

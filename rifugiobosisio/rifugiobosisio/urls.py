@@ -30,4 +30,7 @@ urlpatterns = [
     path("registrazione/",views.registerPage,name="registrazione"),
     path("modulo_adozione/<int:animali_id>/",views.modulo_adozione,name="modulo_adozione"),
     path("invio_modulo_adozione/<int:animali_id>",views.invio_modulo_adozione,name="invio_modulo_adozione"),
+    path("gestione_animali/",views.gestione_animali,name="gestione_animali"),
+    path("aggiungi_animale/",views.aggiungi_animale,name="aggiungi_animale"),
+    path("invio_aggiungi_animale/",views.invio_aggiungi_animale,name="invio_aggiungi_animale"),
 ]

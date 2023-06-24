@@ -1,0 +1,51 @@
+<head>
+    {% load static %}
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <title>Aggiunta Animale</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>Aggiungi un Animale</h1>
+    </header>
+
+    <button onclick="location.href = '/home_amministrazione'">Home</button>
+    
+
+    <div>
+        <form action="{% url 'invio_aggiungi_animale' %}" method="post">
+            {% csrf_token %}
+            <fieldset>
+            <legend>Aggiungi:</legend>
+            {% if error_message %} <p><strong>{{error_message}}</strong></p> {% endif %}
+            <hr>
+            <div>
+                <input type="text" name="specie" id="specie" placeholder="Specie" />
+            </div>
+
+            <div>
+                <input type="text" name="razza" id="razza" placeholder="Razza" />
+            </div>
+
+            <div>
+                <input type="number" name="eta" id="eta" placeholder="Età" />
+            </div>
+
+            <div>
+                <textarea name="descrizione" id="descrizione" placeholder="Descrizione" rows="10" cols="50"></textarea>
+            </div>
+
+            <div>
+                <input type="submit" name="aggiungi" id="aggiungi" placeholder="Aggiungi al rifugio" />
+            </div>
+            </fieldset>
+
+    </form>
+    </div>
+    
+    
+</body>

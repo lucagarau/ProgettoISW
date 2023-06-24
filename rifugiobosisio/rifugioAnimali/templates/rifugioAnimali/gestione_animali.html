@@ -55,40 +55,37 @@
             </ul>
           </div>
 
-        <!-- TODO: - Diego sposta e sistema questo bottone-->
-        <button type="button" class="" onclick="location.href = '/gestione_animali/' ">Gestisci Animali</button>
+        <!-- Todo - Diego sposta e sistema questo bottone-->
+        <button type="button" class="" onclick="location.href= '/aggiungi_animale' ">Aggiungi un animale</button>
 
-        <h3>Lista Richieste</h3>
+        <h3>Lista degli animali del rifugio</h3>
     
 
 
         <!--INIZIO NONTOCCARE-->
-        {% if lista_moduli %}
-                    
+        {% if lista_animali %}
+       
+            
             <div class="p-4">
             <table class="table table-bordered table-sm table-responsive">
                 <thead>
                     <tr class="table-primary">
-                        <th>Richiedente</th>
-                        <th>Indirizzo</th>
-                        <th>Recapito</th>
-                        <th>Specie Animale</th>
-                        <th>Razza Animale</th>
-                        <th>Età Animale</th>
-                        <th>Azione</th>
+                        <th>Specie</th>
+                        <th>Razza</th>
+                        <th>Età</th>
+                        <th>descrizione</th>
+                        <th>Stato</th>
                     </tr>
                 </thead>
                 
                 <tbody>
-                    {% for modulo_adozione in lista_moduli %}
+                    {% for animali in lista_animali %}
                         <tr class="table-light">
-                            <td>{{ modulo_adozione.nomeCognome }}</td>
-                            <td>{{ modulo_adozione.indirizzo }}</td>
-                            <td>{{ modulo_adozione.recapito }}</td>
-                            <td>{{ modulo_adozione.animale.specie }}</td>
-                            <td>{{ modulo_adozione.animale.razza }}</td>
-                            <td>{{ modulo_adozione.animale.eta }}</td>
-                            <td><a href="">Da Camabiare</a></td> 
+                            <td>{{ animali.specie }}</td>
+                            <td>{{ animali.razza }}</td>
+                            <td>{{ animali.eta }}</td>
+                            <td>{{ animali.descrizione }}</td>
+                            <td> {{ animali.stato }}</td> 
                             
                         </tr>
                     {% endfor %}
@@ -96,7 +93,7 @@
 
             </table>
         {% else %}
-            <p>non ci sono richieste</p>
+            <p>non ci sono animali</p>
         {% endif %}
         <!--FINE NONTOCCARE-->
 

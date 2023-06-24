@@ -22,6 +22,7 @@ def registerPage(request):
     template = loader.get_template("registration/registrazione.html")
     return HttpResponse(template.render(context,request))
 
+@login_required(login_url='login')
 def home(request):
     lista_animali = Animale.objects.order_by("specie")
     template = loader.get_template("rifugioAnimali/home.html")
@@ -30,6 +31,7 @@ def home(request):
     }
     return HttpResponse(template.render(context,request))
 
+@login_required(login_url='login')
 def home_admin(request):
     #todo: mettere controllo se admin, altrimenti redirect a home
     lista_moduli = ModuloAdozione.objects.order_by("animale")
@@ -56,6 +58,11 @@ def logIn(request):
     template = loader.get_template("registration/login.html")
     return HttpResponse(template.render({},request))
 
+def logOut(request):
+    username = request.user.username
+    if username != None:
+        logout(request)
+        return redirect("/login")
 
 def modulo_adozione(request,animali_id):
     animale_da_adottare = Animale.objects.get(id=animali_id)
@@ -76,17 +83,43 @@ def invio_modulo_adozione(request,animali_id):
             raise KeyError
         nuovo_modulo = ModuloAdozione(nomeCognome = request.POST["nomeCognome"],indirizzo = request.POST["indirizzo"],recapito = request.POST["recapito"],animale = animale_da_adottare) #todo:cambiare con id utente loggato
         nuovo_modulo.save()
+
+        animale_da_adottare.stato = "IN_ATTESA"
+        animale_da_adottare.save()
     except (KeyError, ModuloAdozione.DoesNotExist):
         return render(request, "rifugioAnimali/modulo_adozione.html", {
             "animale_da_adottare" : animale_da_adottare,
             "error_message" : "Non hai compilato tutti i campi",
         })
 
-    template = loader.get_template("rifugioAnimali/home.html") #todo: cambiare con pagina di conferma
+    return redirect('home')
+
+
+def gestione_animali(request):
+    lista_animali = Animale.objects.order_by("specie")
+    template = loader.get_template("rifugioAnimali/gestione_animali.html")
     context = {
-        "animale_da_adottare" : animale_da_adottare,
+        "lista_animali" : lista_animali,
     }
     return HttpResponse(template.render(context,request))
+
+def aggiungi_animale(request):
+    template = loader.get_template("rifugioAnimali/aggiungi_animale.html")
+    context = {}
+    return HttpResponse(template.render(context,request))
+
+def invio_aggiungi_animale(request):
+    try:
+        if request.POST["specie"] == "" or request.POST["razza"] == "" or request.POST["eta"] == "" :
+            raise KeyError
+        nuovo_animale = Animale(specie = request.POST["specie"],razza = request.POST["razza"],eta = request.POST["eta"],descrizione = request.POST["descrizione"],stato = 'NON_ADOTTATO')
+        nuovo_animale.save()
+    except (KeyError, Animale.DoesNotExist):
+        return render(request, "rifugioAnimali/aggiungi_animale.html", {
+            "error_message" : "Non hai compilato tutti i campi",
+        })
+
+    return redirect('gestione_animali')
 
 
 

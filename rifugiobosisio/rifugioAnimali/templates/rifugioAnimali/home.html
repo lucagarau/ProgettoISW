@@ -1,6 +1,6 @@
 <head>
     <title>Rifugio del Gatto Bosisio</title>
-    {% load static %}
+    {% load static %} <!--carica i file statici-->
     {% load bootstrap5 %}
     {% bootstrap_css %}
     <style>
@@ -14,6 +14,7 @@
       }
     </style>
     {% bootstrap_javascript %}
+    <link rel="stylesheet" href="{% static 'style.css' %}"> <!--carica il file css-->
 </head>
 
 <body>
@@ -36,49 +37,22 @@
   <div class="container mt-3 text-center">
     <div class="row align-items-center">
       <div class="col"> <!--Prima colonna-->
+
         <!--Tasto Filtra-->
         <div class="align-items-center btn-group">
           <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="filtra">Filtra</button>
           <ul class="dropdown-menu" style="min-width:300px;">
-            <li>
-              <nav class="navbar bg-body-tertiary">
-                <div class="container-fluid">
-                  <form class="d-flex" role="search">
-                    <!--input e bottone Eta-->  
-                    <input class="form-control me-2" type="ageSearch" placeholder="Età" aria-label="Età">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                  </form>
-                </div>
-              </nav>
-            </li>
-            <li>
-              <nav class="navbar bg-body-tertiary">
-                <div class="container-fluid">
-                  <form class="d-flex" role="search">
-                    <!--input e bottone Specie-->
-                    <input class="form-control me-2" type="speciesSearch" placeholder="Specie" aria-label="Specie">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                  </form>
-                </div>
-              </nav>
-            </li>
-            <li>
-              <nav class="navbar bg-body-tertiary">
-                <div class="container-fluid">
-                  <form class="d-flex" role="search">
-                    <!--input e bottone Razza-->
-                    <input class="form-control me-2" type="raceSearch" placeholder="Razza" aria-label="Razza">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                  </form>
-                </div>
-              </nav>
-            </li>
+            <form method="get" id = "filter-form">
+              {{ lista_filtrata.form.as_ul }}
+              <input type="submit" class ="btn btn-outline-success"/>
+            </form>
           </ul>
         </div>
+
       </div>
       <div class="col-9 text-center"> <!--Seconda colonna-->
         <!--Titolo Pagina-->
-        <h2 class="text-center">Lista Richieste</h2>
+        <h2 class="text-center">I Nostri Animali da Adottare</h2>
       </div>
       <div class="col"> <!--Terza colonna-->
         
@@ -96,8 +70,6 @@
 
         <!--INIZIO NONTOCCARE-->
         {% if lista_animali %}
-       
-            
             <div class="p-4">
             <table class="table table-bordered table-sm table-responsive">
                 <thead>
@@ -111,7 +83,7 @@
                 </thead>
                 
                 <tbody>
-                    {% for animali in lista_animali %}
+                    {% for animali in lista_filtrata.qs %}
                       {% if animali.stato != "ADOTTATO"%}
                         <tr class="table-light">
                             <td>{{ animali.specie }}</td>
@@ -144,5 +116,7 @@
           </script>
         {% endif %}
         <!--FINE NONTOCCARE-->
+
+        
   
 </body>

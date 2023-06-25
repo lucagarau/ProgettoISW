@@ -1,15 +1,36 @@
-<form method="POST" action="{% url 'registrazione' %}">
-    {% csrf_token %}
-    {% for field in form %}
-        {{field.label}}
-        <br>
-        {{field}}
-        <br>
-        {{field.errors}}
-        <br>
-    {% endfor %}
+<head>
+    <title>Rifugio del Gatto Bosisio</title>
+    {% load static %}
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
 
-    <input type="submit" value="Registrati">
-</form>
+<body>
+    <div class = "form-centrato row h-100 form align-items-center justify-content-center" style="width: 100vw; height: 100vh;">
+        <div class="col-md-6 bg-secondary bg-gradient text-white" id="form-accesso">
 
-<button  type="button" onclick="location.href= '/login' ">Torna alla pagina di Login</button>
+            <h1 class="text-center m-3">Il rifugio del Gatto bosisio</h1>
+            <h2 class="text-center m-3">Registrati:</h2>
+
+            <form method="POST" action="{% url 'registrazione' %}">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {{field.label}}
+                        <br>
+                        {{field}}
+                        <br>
+                        {{field.errors}}
+                        <br>
+                    </div>
+                {% endfor %}
+
+                <input type="submit" value="Registrati" class="btn btn-primary m-3">
+            </form>
+        </div>
+    </div>
+
+    <button  type="button" class="btn btn-primary m-3" onclick="location.href= '/login' ">Torna alla pagina di Login</button>
+</body>

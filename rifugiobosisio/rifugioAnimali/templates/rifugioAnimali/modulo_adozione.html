@@ -27,15 +27,15 @@
               {% if error_message %} <p><strong>{{error_message}}</strong></p> {% endif %}
             <div class="form-group">
               <label for="adotta_nome">Nome e Cognome:</label>
-              <input type="text" class="form-control" id="adotta_nome" placeholder="Nome e Cognome">
+              <input type="text" class="form-control" id="adotta_nome" name="nomeCognome" placeholder="Nome e Cognome">
             </div>
             <div class="form-group">
               <label for="adotta_indirizzo">Indirizzo:</label>
-              <input type="text" class="form-control" id="adotta_indirizzo" placeholder="Indirizzo">
+              <input type="text" class="form-control" id="adotta_indirizzo" name="indirizzo" placeholder="Indirizzo">
             </div>
             <div class="form-group">
               <label for="adotta_recapito">Recapito:</label>
-              <input type="text" class="form-control" id="adotta_recapito" placeholder="Email o Telefono">
+              <input type="text" class="form-control" id="adotta_recapito" name = "recapito"placeholder="Email o Telefono">
             </div>
             <div class="form-group text-center">
               <a href="#" role="button" class="btn btn-light m-3" onclick="location.href = '/home'">Home</a>

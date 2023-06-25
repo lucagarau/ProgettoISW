@@ -5,6 +5,7 @@ from django.template import loader
 from .models import Animale, ModuloAdozione
 from .forms import CreateUserForm
 from django.contrib.auth import authenticate, login, logout
+from .filters import AnimaleFilter, AnimaleAdminFilter, ModuloAdozioneFilter
 
 # Create your views here.
 
@@ -30,9 +31,11 @@ def home(request):
         return redirect('home_admin')
     
     lista_animali = Animale.objects.order_by("specie")
+    lista_filtrata = AnimaleFilter(request.GET, queryset=lista_animali)
     template = loader.get_template("rifugioAnimali/home.html")
     context = {
         "lista_animali" : lista_animali,
+        "lista_filtrata" : lista_filtrata,
     }
     return HttpResponse(template.render(context,request))
 
@@ -44,10 +47,12 @@ def home_admin(request):
         return redirect('home')
 
     lista_moduli = ModuloAdozione.objects.order_by("animale")
+    lista_filtrata = ModuloAdozioneFilter(request.GET, queryset=lista_moduli)
     template = loader.get_template("rifugioAnimali/home_amministratore.html")
     
     context = {
         "lista_moduli" : lista_moduli,
+        "lista_filtrata" : lista_filtrata,
     }
     return HttpResponse(template.render(context,request))
 
@@ -113,9 +118,11 @@ def gestione_animali(request):
         return redirect('home')
     
     lista_animali = Animale.objects.order_by("specie")
+    lista_filtrata = AnimaleAdminFilter(request.GET, queryset=lista_animali)
     template = loader.get_template("rifugioAnimali/gestione_animali.html")
     context = {
         "lista_animali" : lista_animali,
+        "lista_filtrata" : lista_filtrata,
     }
     return HttpResponse(template.render(context,request))
 

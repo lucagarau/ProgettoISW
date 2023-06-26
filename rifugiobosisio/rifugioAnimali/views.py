@@ -82,7 +82,13 @@ def logOut(request):
 
 @login_required(login_url='login')
 def modulo_adozione(request,animali_id):
-    animale_da_adottare = Animale.objects.get(id=animali_id)
+    animale_da_adottare = get_object_or_404(Animale, id=animali_id)
+    if animale_da_adottare.stato == "ADOTTATO" or animale_da_adottare.stato == "IN_ATTESA":
+        return redirect('home')
+    
+    if animale_da_adottare == None:
+        return redirect('home')
+    
     template = loader.get_template("rifugioAnimali/modulo_adozione.html")
     context = {
         "animale_da_adottare" : animale_da_adottare,
@@ -167,6 +173,7 @@ def gestione_modulo_adozione(request,modulo_id,stato):
     try:
         if stato == "1":
             modulo_da_gestire.animale.stato = "ADOTTATO"
+            modulo_da_gestire.full_clean()
             modulo_da_gestire.animale.save()
             msg = "Richiesta accettata con successo"
         elif stato == "0":

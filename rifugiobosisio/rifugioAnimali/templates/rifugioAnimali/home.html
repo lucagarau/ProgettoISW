@@ -84,7 +84,7 @@
                 
                 <tbody>
                     {% for animali in lista_filtrata.qs %}
-                      {% if animali.stato != "ADOTTATO"%}
+                      {% if animali.stato == "NON_ADOTTATO"%}
                         <tr class="table-light">
                             <td>{{ animali.specie }}</td>
                             <td>{{ animali.razza }}</td>

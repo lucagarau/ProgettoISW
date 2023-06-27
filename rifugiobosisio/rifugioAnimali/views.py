@@ -102,8 +102,12 @@ def invio_modulo_adozione(request,animali_id):
     try:
         if request.POST["nomeCognome"] == "" or request.POST["indirizzo"] == "" or request.POST["recapito"] == "":
             raise KeyError
+        if(animale_da_adottare.stato == "ADOTTATO" or animale_da_adottare.stato == "IN_ATTESA"):
+            return redirect('home')
         nuovo_modulo = ModuloAdozione(nomeCognome = request.POST["nomeCognome"],indirizzo = request.POST["indirizzo"],recapito = request.POST["recapito"],animale = animale_da_adottare) #todo:cambiare con id utente loggato
         nuovo_modulo.save()
+
+        
 
         animale_da_adottare.stato = "IN_ATTESA"
         animale_da_adottare.save()

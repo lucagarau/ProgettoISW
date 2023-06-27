@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from .views import registerPage, home, home_admin, logIn
 from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
+from django.urls import reverse
 
 '''
 -----------------------------------------------------------------
@@ -304,12 +305,198 @@ class ModuloAdozioneViewTestCase(TestCase):
         self.assertTemplateUsed(response,'rifugioAnimali/modulo_adozione.html')
 
 
+'''
+    Test Unitari per la view gestioneAnimali:
+    - Test per la corretta visualizzazione della pagina
+    - Test per vedere se utente è loggato
+    - Test per vedere se utente non admin e reindirizzamento
+    - Test per vedere se la lista degli animali è corretta
+'''
+class GestioneAnimaliViewTestCase(TestCase):
+    def setUp(self):
+        User.objects.create_superuser(username="admin",password="admin")
+        Animale.objects.create(id=100,specie="cane",razza="labrador",descrizione="cane di taglia media",stato = "non_adottato")
+        Animale.objects.create(id=101,specie="gatto",razza="persiano",descrizione="gatto di taglia media",stato = "adottato")
+        Animale.objects.create(id=102,specie="cane",razza="pastore",descrizione="cane di taglia grande",stato = "in_attesa") 
 
+    def test_gestione_animali_view(self):
+        self.client.login(username="admin",password="admin")
+        response = self.client.get('/gestione_animali/')
+        self.assertEqual(response.status_code,200)
+
+    def test_gestione_animali_view_not_logged(self):
+        response = self.client.get('/gestione_animali/')
+        self.assertEqual(response.status_code,302)
+
+    def test_gestione_animali_view_not_admin(self):
+        User.objects.create_user(username="user",password="user")
+        self.client.login(username="user",password="user")
+        response = self.client.get('/gestione_animali/')
+        self.assertEqual(response.status_code,302)
+
+    def test_gestione_animali_view_template(self):
+        self.client.login(username="admin",password="admin")
+        response = self.client.get('/gestione_animali/')
+        self.assertTemplateUsed(response,'rifugioAnimali/gestione_animali.html')
+
+    def test_gestione_animali_view_list(self):
+        self.client.login(username="admin",password="admin")
+        response = self.client.get('/gestione_animali/')
+        self.assertEqual(list(response.context['lista_animali']),list(Animale.objects.order_by("specie")))
+
+'''
+    Test Unitari per la view aggiungi_animale:
+    - Test per la corretta visualizzazione della pagina
+    - Test per vedere se utente è loggato
+    - Test per vedere se utente non admin e reindirizzamento
+'''
+
+class AggiungiAnimaleViewTestCase(TestCase):
+    def setUp(self):
+        User.objects.create_superuser(username="admin",password="admin")
     
+    def test_aggiungi_animale_view(self):
+        self.client.login(username="admin",password="admin")
+        response = self.client.get('/aggiungi_animale/')
+        self.assertEqual(response.status_code,200)
 
+    def test_aggiungi_animale_view_not_logged(self):
+        response = self.client.get('/gestione_animali/')
+        self.assertEqual(response.status_code,302)
 
-    
+    def test_aggiungi_animale_view_not_admin(self):
+        User.objects.create_user(username="user",password="user")
+        self.client.login(username="user",password="user")
+        response = self.client.get('/aggiungi_animale/')
+        self.assertEqual(response.status_code,302)
 
-    
+    def test_aggiungi_animale_view_template(self):
+        self.client.login(username="admin",password="admin")
+        response = self.client.get('/aggiungi_animale/')
+        self.assertTemplateUsed(response,'rifugioAnimali/aggiungi_animale.html')
 
+'''
+    Test Unitari per la view invio_modulo_adozione:
+    - Test per la corretta visualizzazione della pagina
+    - Test per vedere se utente è loggato
+    - Test per controllo se animale è esistente
+    - Test per controllo se animale è disponibile
+'''
 
+class InvioModuloAdozioneViewTestCase(TestCase):
+    def setUp(self):
+        User.objects.create_superuser(username="admin",password="admin")
+        User.objects.create_user(username="user",password="user")
+        Animale.objects.create(id=100,specie="cane",razza="labrador",descrizione="cane di taglia media",stato = "non_adottato")
+        
+    def test_invio_modulo_adozione_view(self):
+        self.client.login(username="user",password="user")
+        response = self.client.post(
+            reverse('invio_modulo_adozione', args=[100]), {
+            'nomeCognome': 'Mario Rossi',
+            'indirizzo': 'Via delle Rose 123',
+            'recapito': '1234567890',
+        })
+        self.assertEqual(response.status_code,302)
+        self.assertEqual(response.url, reverse('home'))
+
+    def test_invio_modulo_adozione_view_not_logged(self):
+        response = self.client.post(
+            reverse('invio_modulo_adozione', args=[100]), {
+            'nomeCognome': 'Mario Rossi',
+            'indirizzo': 'Via delle Rose 123',
+            'recapito': '1234567890',
+        })
+        self.assertEqual(response.status_code,302)
+
+    def test_invio_modulo_adozione_view_animale_doesnt_exist(self):
+        self.client.login(username="user",password="user")
+        response = self.client.post(
+            reverse('invio_modulo_adozione', args=[101]), {
+            'nomeCognome': 'Mario Rossi',
+            'indirizzo': 'Via delle Rose 123',
+            'recapito': '1234567890',
+        })
+        with self.assertRaises(Animale.DoesNotExist):
+            Animale.objects.get(id=101)
+
+    def test_invio_modulo_adozione_view_nomeCognome_empty_field(self):
+        self.client.login(username="user",password="user")
+        response = self.client.post(
+            reverse('invio_modulo_adozione', args=[100]), {
+            'nomeCognome': '',
+            'indirizzo': 'Via delle Rose 123',
+            'recapito': '1234567890',
+        })
+        self.assertEqual(response.status_code, 200) 
+        self.assertTemplateUsed(response, 'rifugioAnimali/modulo_adozione.html')
+        self.assertContains(response, 'Non hai compilato tutti i campi')
+
+    def test_invio_modulo_adozione_view_indirizzo_empty_field(self):
+        self.client.login(username="user",password="user")
+        response = self.client.post(
+            reverse('invio_modulo_adozione', args=[100]), {
+            'nomeCognome': 'Mario Rossi',
+            'indirizzo': '',
+            'recapito': '1234567890',
+        })
+        self.assertEqual(response.status_code, 200) 
+        self.assertTemplateUsed(response, 'rifugioAnimali/modulo_adozione.html')
+        self.assertContains(response, 'Non hai compilato tutti i campi')
+
+    def test_invio_modulo_adozione_view_recapito_empty_field(self):
+        self.client.login(username="user",password="user")
+        response = self.client.post(
+            reverse('invio_modulo_adozione', args=[100]), {
+            'nomeCognome': 'Mario Rossi',
+            'indirizzo': 'Via delle Rose 123',
+            'recapito': '',
+        })
+        self.assertEqual(response.status_code, 200) 
+        self.assertTemplateUsed(response, 'rifugioAnimali/modulo_adozione.html')
+        self.assertContains(response, 'Non hai compilato tutti i campi')
+
+    def test_invio_modulo_adozione_view_inserimento_corretto(self):
+        self.client.login(username="user",password="user")
+        response = self.client.post(
+            reverse('invio_modulo_adozione', args=[100]), {
+            'nomeCognome': 'Mario Rossi',
+            'indirizzo': 'Via delle Rose 123',
+            'recapito': '1234567890',
+        })
+
+        modulo = ModuloAdozione.objects.get(id=1)
+        self.assertEqual(modulo.nomeCognome, 'Mario Rossi')
+        self.assertEqual(modulo.indirizzo, 'Via delle Rose 123')
+        self.assertEqual(modulo.recapito, '1234567890')
+
+        animale = Animale.objects.get(id=100)
+        self.assertEqual(animale.stato, 'IN_ATTESA')
+
+        self.assertEqual(response.status_code,302)
+        self.assertEqual(response.url, reverse('home'))
+
+    def test_invio_modulo_adozione_view_animale_adottato(self):
+        Animale.objects.create(id=101,specie="cane",razza="labrador",descrizione="cane di taglia media",stato = "ADOTTATO")
+        self.client.login(username="user",password="user")
+        response = self.client.post(
+            reverse('invio_modulo_adozione', args=[101]), {
+            'nomeCognome': 'Mario Rossi',
+            'indirizzo': 'Via delle Rose 123',
+            'recapito': '1234567890',
+        })
+        self.assertEqual(response.status_code,302)
+        self.assertEqual(response.url, reverse('home'))
+
+    def test_invio_modulo_adozione_view_animale_in_attesa(self):
+        Animale.objects.create(id=101,specie="cane",razza="labrador",descrizione="cane di taglia media",stato = "IN_ATTESA")
+        self.client.login(username="user",password="user")
+        response = self.client.post(
+            reverse('invio_modulo_adozione', args=[101]), {
+            'nomeCognome': 'Mario Rossi',
+            'indirizzo': 'Via delle Rose 123',
+            'recapito': '1234567890',
+        })
+
+        self.assertEqual(response.status_code,302)
+        self.assertEqual(response.url, reverse('home'))

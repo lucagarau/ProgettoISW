@@ -500,3 +500,389 @@ class InvioModuloAdozioneViewTestCase(TestCase):
 
         self.assertEqual(response.status_code,302)
         self.assertEqual(response.url, reverse('home'))
+
+'''
+    Test unitari per la view di registrazione
+    - Test per verificare che la pagina di registrazione venga caricata correttamente
+    - Test per verificare che la registrazione di un utente avvenga correttamente
+    - Test per verificare che la registrazione di un utente non avvenga se i campi non sono compilati correttamente
+'''
+
+class TestRegisterPageViewTestCase(TestCase):
+    def test_register_page_view(self):
+        response = self.client.get(reverse('registrazione'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/registrazione.html')
+
+    def test_register_page_view_creazione_utente(self):
+        response = self.client.post(reverse('registrazione'), {
+            'username': 'user',
+            'password1': 'user',
+            'password2': 'user',
+            'email': 'user@user.it',
+            'first_name': 'user',
+            'last_name': 'user',
+        })
+        self.client.login(username="user",password="user")
+        response = self.client.get(reverse('home'))
+        self.assertEqual(response.status_code, 302)
+        
+
+    def test_register_page_view_username_empty_field(self):
+        response = self.client.post(reverse('registrazione'), {
+            'username': '',
+            'password1': 'user',
+            'password2': 'user',
+            'email': 'user@user.it',
+            'first_name': 'user',
+            'last_name': 'user',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/registrazione.html')
+
+    def test_register_page_view_password1_empty_field(self):
+        response = self.client.post(reverse('registrazione'), {
+            'username': 'user',
+            'password1': '',
+            'password2': 'user',
+            'email': 'user@user.it',
+            'first_name': 'user',
+            'last_name': 'user',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/registrazione.html')
+
+    def test_register_page_view_password2_empty_field(self):
+        response = self.client.post(reverse('registrazione'), {
+            'username': 'user',
+            'password1': 'user',
+            'password2': '',
+            'email': 'user@user.it',
+            'first_name': 'user',
+            'last_name': 'user',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/registrazione.html')
+
+    def test_register_page_view_email_empty_field(self):
+        response = self.client.post(reverse('registrazione'), {
+            'username': 'user',
+            'password1': 'user',
+            'password2': 'user',
+            'email': '',
+            'first_name': 'user',
+            'last_name': 'user',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/registrazione.html')
+
+    def test_register_page_view_first_name_empty_field(self):
+        response = self.client.post(reverse('registrazione'), {
+            'username': 'user',
+            'password1': 'user',
+            'password2': 'user',
+            'email': 'user@user.it',
+            'first_name': '',
+            'last_name': 'user',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/registrazione.html')
+
+    def test_register_page_view_last_name_empty_field(self):
+        response = self.client.post(reverse('registrazione'), {
+            'username': 'user',
+            'password1': 'user',
+            'password2': 'user',
+            'email': 'user@user.it',
+            'first_name': 'user',
+            'last_name': '',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/registrazione.html')
+                         
+    def test_register_page_view_password1_password2_not_equal(self):
+        response = self.client.post(reverse('registrazione'), {
+            'username': 'user',
+            'password1': 'user1',
+            'password2': 'user2',
+            'email': 'user@user.it',
+            'first_name': 'user',
+            'last_name': 'user',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/registrazione.html')
+
+    def test_register_page_view_username_already_exists(self):
+        User.objects.create(username='user', password='user')
+        response = self.client.post(reverse('registrazione'), {
+            'username': 'user',
+            'password1': 'user',
+            'password2': 'user',
+            'email': 'user@user.it',
+            'first_name': 'user',
+            'last_name': 'user',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/registrazione.html')
+
+'''
+    Test unitari per la view invio_aggiungi_animale
+    - Test per verificare che la pagina di aggiunta di un animale venga caricata correttamente
+    - Test per verificare che l'utente sia loggato
+    - Test per verificare che l'utente sia admin
+    - Test per verificare che l'animale venga aggiunto correttamente
+    - Test per verificare che l'animale non venga aggiunto se i campi non sono compilati correttamente
+
+'''
+
+class TestInvioAggiungiAnimaleViewTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='user', password='user')
+        self.admin = User.objects.create_superuser(username='admin', password='admin',)
+
+    def test_invio_aggiungi_animale_view(self):
+        self.client.login(username='user', password='user')
+        response = self.client.post(reverse('invio_aggiungi_animale'), {
+            'specie' : 'cane',
+            'razza' : 'pastore tedesco',
+            'eta' : 5,
+            'descrizione' : 'cane di 5 anni',
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_invio_aggiungi_animale_view_not_logged(self):
+        response = self.client.post(reverse('invio_aggiungi_animale'), {
+            'specie' : 'cane',
+            'razza' : 'pastore tedesco',
+            'eta' : 5,
+            'descrizione' : 'cane di 5 anni',
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_invio_aggiungi_animale_view_not_admin(self):
+        self.client.login(username='user', password='user')
+        response = self.client.post(reverse('invio_aggiungi_animale'), {
+            'specie' : 'cane',
+            'razza' : 'pastore tedesco',
+            'eta' : 5,
+            'descrizione' : 'cane di 5 anni',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('home'))
+
+    def test_invio_aggiungi_animale_view_empty_specie_fields(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('invio_aggiungi_animale'), {
+            'specie' : '',
+            'razza' : 'pastore tedesco',
+            'eta' : 5,
+            'descrizione' : 'cane di 5 anni',
+        })
+        self.assertEqual(response.status_code, 200)
+
+    def test_invio_aggiungi_animale_view_empty_razza_fields(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('invio_aggiungi_animale'), {
+            'specie' : 'cane',
+            'razza' : '',
+            'eta' : 5,
+            'descrizione' : 'cane di 5 anni',
+        })
+        self.assertEqual(response.status_code, 200)
+
+    def test_invio_aggiungi_animale_view_empty_eta_fields(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('invio_aggiungi_animale'), {
+            'specie' : 'cane',
+            'razza' : 'pastore tedesco',
+            'eta' : '',
+            'descrizione' : 'cane di 5 anni',
+        })
+        self.assertEqual(response.status_code, 200)
+
+    def test_invio_aggiungi_animale_view_empty_descrizione_fields(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('invio_aggiungi_animale'), {
+            'specie' : 'cane',
+            'razza' : 'pastore tedesco',
+            'eta' : 5,
+            'descrizione' : '',
+        })
+        self.assertEqual(response.status_code, 302)
+
+'''
+    Test unitari per la view gestione_modulo_adozione
+    - Test per verificare che la pagina di gestione del modulo di adozione venga caricata correttamente
+    - Test per verificare che l'utente sia loggato
+    - Test per verificare che l'utente sia admin
+    - Test per verificare che la modifica avvenga correttamente
+'''
+
+class TestGestioneModuloAdozioneViewTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='user', password='user')
+        self.admin = User.objects.create_superuser(username='admin', password='admin',)
+        self.animale = Animale.objects.create(id=101,specie='cane', razza='pastore tedesco', eta=5, descrizione='cane di 5 anni',stato = "IN_ATTESA")
+        self.modulo = ModuloAdozione.objects.create(id=102, nomeCognome='nome cognome', recapito='3333333333', indirizzo='via roma', animale=self.animale)
+
+        self.user.save()
+        self.animale.save()
+        self.modulo.save()
+
+    def test_gestione_modulo_adozione_view(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('gestione_modulo_adozione'), {
+            'modulo_id' : 102,
+            'stato' : 'accetta',
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_gestione_modulo_adozione_view_not_logged(self):
+        response = self.client.post(reverse('gestione_modulo_adozione'), {
+            'modulo_id' : 102,
+            'stato' : 'accetta',
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_gestione_modulo_adozione_view_not_admin(self):
+        response = self.client.post(reverse('gestione_modulo_adozione'), {
+            'modulo_id' : 102,
+            'stato' : 'accetta',
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_gestione_modulo_adozione_view_richiesta_accettata(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('gestione_modulo_adozione'), {
+            'modulo_id' : 102,
+            'stato' : 'accetta',
+        })
+        animaleConStatoModificato = Animale.objects.get(id=self.animale.id)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(animaleConStatoModificato.stato, "ADOTTATO")
+
+
+    def test_gestione_modulo_adozione_view_richiesta_rifiutata(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('gestione_modulo_adozione'), {
+            'modulo_id' : 102,
+            'stato' : 'rifiuta',
+        })
+        animaleConStatoModificato = Animale.objects.get(id=self.animale.id)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(animaleConStatoModificato.stato, "NON_ADOTTATO")
+
+'''
+    Test unitari per la view modifica_animale
+    - Test per verificare che la pagina di modifica dell'animale venga caricata correttamente
+    - Test per verificare che l'utente sia loggato
+    - Test per verificare che l'utente sia admin
+'''
+class TestModificaAnimaleViewTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='user', password='user')
+        self.admin = User.objects.create_superuser(username='admin', password='admin',)
+        self.animale = Animale.objects.create(id=101,specie='cane', razza='pastore tedesco', eta=5, descrizione='cane di 5 anni',stato = "IN_ATTESA")
+
+    def test_modifica_animale_view(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('modifica_animale'), {
+            'animale_id' : 101,
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'rifugioAnimali/modifica_animale.html')
+
+    def test_modifica_animale_view_not_logged(self):
+        response = self.client.post(reverse('modifica_animale'), {
+            'animale_id' : 101,
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_modifica_animale_view_not_admin(self):
+        self.client.login(username='user', password='user')
+        response = self.client.post(reverse('modifica_animale'), {
+            'animale_id' : 101,
+        })
+        self.assertEqual(response.status_code, 302)
+
+
+'''
+    Test unitari per la view invio_modifica_animale
+    - Test per verificare che la pagina di invio della modifica dell'animale venga caricata correttamente
+    - Test per verificare che l'utente sia loggato
+    - Test per verificare che l'utente sia admin
+    - Test per verificare che i campi siano compilati correttamente
+    - Test per vedere se la modifica dell'animale è andata a buon fine
+'''
+
+class TestInvioModificaAnimaleViewTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='user', password='user')
+        self.admin = User.objects.create_superuser(username='admin', password='admin',)
+        self.animale = Animale.objects.create(id=101,specie='cane', razza='pastore tedesco', eta=5, descrizione='cane di 5 anni',stato = "IN_ATTESA")
+
+    def test_invio_modifica_animale_view(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('invio_modifica_animale'), {
+            'animale_id' : 101,
+            'specie' : 'cane',
+            'razza' : 'pastore tedesco',
+            'eta' : 5,
+            'descrizione' : 'cane di 5 anni',
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_invio_modifica_animale_view_not_logged(self):
+        response = self.client.post(reverse('invio_modifica_animale'), {
+            'animale_id' : 101,
+            'specie' : 'cane',
+            'razza' : 'pastore tedesco',
+            'eta' : 5,
+            'descrizione' : 'cane di 5 anni',
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_invio_modifica_animale_view_not_admin(self):
+        self.client.login(username='user', password='user')
+        response = self.client.post(reverse('invio_modifica_animale'), {
+            'animale_id' : 101,
+            'specie' : 'cane',
+            'razza' : 'pastore tedesco',
+            'eta' : 5,
+            'descrizione' : 'cane di 5 anni',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('home'))
+
+    def test_invio_modifica_animale_view_campi_non_compilati(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('invio_modifica_animale'), {
+            'animale_id' : 101,
+            'specie' : '',
+            'razza' : '',
+            'eta' : '',
+            'descrizione' : '',
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_invio_modifica_animale_view_modifica_animale_avvenuta(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('invio_modifica_animale'), {
+            'id' : 101,
+            'specie' : 'cagnetto',
+            'razza' : 'corso',
+            'eta' : 6,
+            'descrizione' : 'cane di 6 anni',
+        })
+
+        animaleModificato = Animale.objects.get(id=101)
+        self.assertEqual(animaleModificato.specie, 'cagnetto')
+        self.assertEqual(animaleModificato.razza, 'corso')
+        self.assertEqual(animaleModificato.eta, 6)
+        self.assertEqual(animaleModificato.descrizione, 'cane di 6 anni')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('gestione_animali'))
+    
+    
+
+        

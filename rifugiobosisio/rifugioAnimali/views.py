@@ -160,7 +160,7 @@ def invio_aggiungi_animale(request):
     
 
     try:
-        if request.POST["specie"] == "" or request.POST["razza"] == "" or request.POST["eta"] == "" :
+        if request.POST["specie"] or request.POST["razza"] == "" or request.POST["eta"] == "" :
             raise KeyError
         nuovo_animale = Animale(specie = request.POST["specie"],razza = request.POST["razza"],eta = request.POST["eta"],descrizione = request.POST["descrizione"],stato = 'NON_ADOTTATO')
         nuovo_animale.save()
@@ -219,7 +219,7 @@ def invio_modifica_animale(request):
         return redirect('home')
     try:
         if(request.method == 'POST'):
-            if(request.POST["specie"] == "" or request.POST["razza"] == "" or request.POST["eta"] == "" ):
+            if(str(request.POST["specie"]).strip == "" or str(request.POST["razza"]).strip == "" or str(request.POST["eta"]).strip == "" ):
                 raise KeyError
              
             animale_da_modificare = get_object_or_404(Animale,id=request.POST["id"])
@@ -230,8 +230,14 @@ def invio_modifica_animale(request):
             animale_da_modificare.full_clean()
             animale_da_modificare.save()
             return redirect('gestione_animali')
-    except (Animale.DoesNotExist, KeyError, ValidationError, IntegrityError):
+    except (Animale.DoesNotExist):
         return redirect('home_admin')
+    except (KeyError, ValidationError, IntegrityError):
+        return render(request, "rifugioAnimali/modifica_animale.html", {
+            "error_message" : "Non hai compilato tutti i campi",
+            "animale_da_modificare" : animale_da_modificare,
+        })
+        
     
 @login_required(login_url='login')
 def elimina_animale(request):

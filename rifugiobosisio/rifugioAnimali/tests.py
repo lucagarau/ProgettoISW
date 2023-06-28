@@ -678,7 +678,7 @@ class TestInvioAggiungiAnimaleViewTestCase(TestCase):
             'eta' : 5,
             'descrizione' : 'cane di 5 anni',
         })
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
     def test_invio_aggiungi_animale_view_empty_razza_fields(self):
         self.client.login(username='admin', password='admin')
@@ -708,7 +708,7 @@ class TestInvioAggiungiAnimaleViewTestCase(TestCase):
             'eta' : 5,
             'descrizione' : '',
         })
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
 '''
     Test unitari per la view gestione_modulo_adozione
@@ -824,7 +824,7 @@ class TestInvioModificaAnimaleViewTestCase(TestCase):
     def test_invio_modifica_animale_view(self):
         self.client.login(username='admin', password='admin')
         response = self.client.post(reverse('invio_modifica_animale'), {
-            'animale_id' : 101,
+            'id' : 101,
             'specie' : 'cane',
             'razza' : 'pastore tedesco',
             'eta' : 5,
@@ -834,7 +834,7 @@ class TestInvioModificaAnimaleViewTestCase(TestCase):
 
     def test_invio_modifica_animale_view_not_logged(self):
         response = self.client.post(reverse('invio_modifica_animale'), {
-            'animale_id' : 101,
+            'id' : 101,
             'specie' : 'cane',
             'razza' : 'pastore tedesco',
             'eta' : 5,
@@ -857,13 +857,13 @@ class TestInvioModificaAnimaleViewTestCase(TestCase):
     def test_invio_modifica_animale_view_campi_non_compilati(self):
         self.client.login(username='admin', password='admin')
         response = self.client.post(reverse('invio_modifica_animale'), {
-            'animale_id' : 101,
+            'id' : 101,
             'specie' : '',
             'razza' : '',
             'eta' : '',
             'descrizione' : '',
         })
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
     def test_invio_modifica_animale_view_modifica_animale_avvenuta(self):
         self.client.login(username='admin', password='admin')

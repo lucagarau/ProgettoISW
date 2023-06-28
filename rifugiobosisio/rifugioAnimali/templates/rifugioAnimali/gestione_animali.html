@@ -100,6 +100,7 @@
               <th>Età</th>
               <th>descrizione</th>
               <th>Stato</th>
+              <th> </th>
           </tr>
         </thead>
         <tbody>
@@ -109,7 +110,14 @@
               <td>{{ animali.razza }}</td>
               <td>{{ animali.eta }}</td>
               <td>{{ animali.descrizione }}</td>
-              <td> {{ animali.stato }}</td> 
+              <td>{{ animali.stato }}</td>
+              <td>
+                <form method="post" action="{% url 'modifica_animale'%}">
+                  {% csrf_token %}
+                  <input type="hidden" name="animale_id" value="{{ animali.id }}">
+                  <input type="submit" class="btn btn-success" value="Modifica">
+                </form>
+              </td>
             </tr>
           {% endfor %}
         </tbody>

@@ -87,7 +87,21 @@
                             <td>{{ modulo_adozione.animale.specie }}</td>
                             <td>{{ modulo_adozione.animale.razza }}</td>
                             <td>{{ modulo_adozione.animale.eta }}</td>
-                            <td><a href="/gestione_modulo_adozione/{{modulo_adozione.id}}/1/">Accetta    </a><a href="/gestione_modulo_adozione/{{modulo_adozione.id}}/0/">Rifiuta</a></td> 
+                            <td>
+                              <form method="post" action="{% url 'gestione_modulo_adozione' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="modulo_id" value="{{ modulo_adozione.id }}">
+                                <input type="hidden" name="stato" value="accetta">
+                                <input type="submit" class="btn btn-outline-success" value="Accetta">
+                              </form>
+
+                              <form method="post" action="{% url 'gestione_modulo_adozione' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="modulo_id" value="{{ modulo_adozione.id }}">
+                                <input type="hidden" name="stato" value="rifiuta">
+                                <input type="submit" class="btn btn-outline-danger" value="Rifiuta">
+                              </form>
+                            </td> 
                             
                         </tr>
                     {% endfor %}

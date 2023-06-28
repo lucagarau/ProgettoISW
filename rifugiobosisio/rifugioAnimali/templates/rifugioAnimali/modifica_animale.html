@@ -1,0 +1,51 @@
+<head>
+    {% load static %}
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <title>Modifica animale</title>
+</head>
+
+<body> 
+  {% if animale_da_modificare%}
+  <div> 
+    <div class="container h-100">
+      <div class="form-centrato row h-100 justify-content-center align-items-center">
+        <div class="col-md-6 bg-secondary bg-gradient text-white" id="form-accesso">
+          
+          <h3 class="text-center m-3">Modifica dati Animale:</h3>
+          <form action="{% url 'invio_modifica_animale' %}" method="post">
+              {% csrf_token %}
+              <fieldset>
+                <input type="hidden" name="id" value="{{animale_da_modificare.id}}">  
+              {% if error_message %} <p><strong>{{error_message}}</strong></p> {% endif %}
+            <div class="form-group">
+              <label for="specie">Specie:</label>
+              <input type="text" class="form-control" id="specie" name="specie" placeholder="Specie" value="{{animale_da_modificare.specie}}">
+            </div>
+            <div class="form-group">
+              <label for="razza">Razza:</label>
+              <input type="text" class="form-control" id="razza" name="razza" placeholder="Razza" value="{{animale_da_modificare.razza}}">
+            </div>
+            <div class="form-group">
+              <label for="eta">Età:</label>
+              <input type="text" class="form-control" id="eta" name = "eta"placeholder="Età" value = "{{animale_da_modificare.eta}}">
+            </div>
+            <div class="form-group">
+              <label for="descrizione">Descrizione:</label>
+              <input type ="text" class="form-control" id="descrizione" name = "descrizione"placeholder="Descrizione" value = "{{animale_da_modificare.descrizione}}">
+            </div>
+            <div class="form-group text-center">
+              <a href="#" role="button" class="btn btn-light m-3" onclick="location.href = '/home'">Home</a>
+              <button type="submit" name="modifica" id="modifica" class="btn btn-primary m-3">Modifica</button>
+            </div>
+          </form> 
+        </div>
+      </div>
+    </div>
+  </div>
+    {% else %}
+    <h3>nessun animale da adottare</h3>
+    {% endif %}
+</body>

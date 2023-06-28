@@ -6,6 +6,11 @@ from .models import Animale, ModuloAdozione
 from .forms import CreateUserForm
 from django.contrib.auth import authenticate, login, logout
 from .filters import AnimaleFilter, AnimaleAdminFilter, ModuloAdozioneFilter
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
+from django.db.utils import IntegrityError
+
+import sys
 
 # Create your views here.
 
@@ -168,30 +173,67 @@ def invio_aggiungi_animale(request):
 
 
 @login_required(login_url='login')
-def gestione_modulo_adozione(request,modulo_id,stato):
+def gestione_modulo_adozione(request):
     #controllo se admin
     if(not(request.user.is_staff)):
         return redirect('home')
-    
-    modulo_da_gestire = ModuloAdozione.objects.get(id=modulo_id)
     try:
-        if stato == "1":
-            modulo_da_gestire.animale.stato = "ADOTTATO"
-            modulo_da_gestire.full_clean()
-            modulo_da_gestire.animale.save()
-            msg = "Richiesta accettata con successo"
-        elif stato == "0":
-            modulo_da_gestire.animale.stato = "NON_ADOTTATO"
-            modulo_da_gestire.animale.save()
-            msg = "Richiesta rifiutata con successo"
-        else:
-            raise KeyError
+        if(request.method == 'POST'):
+            modulo_da_gestire = get_object_or_404(ModuloAdozione,id=request.POST["modulo_id"])
+            match request.POST["stato"]:
+                case "accetta":
+                    modulo_da_gestire.animale.stato = "ADOTTATO"
+                    modulo_da_gestire.animale.save()
+                    modulo_da_gestire.delete()
+                    return redirect('home_admin')
+                case "rifiuta":
+                    modulo_da_gestire.animale.stato = "NON_ADOTTATO"
+                    modulo_da_gestire.animale.save()
+                    modulo_da_gestire.delete()
+                    return redirect('home_admin')
+                case _:
+                    raise KeyError
     except (KeyError, ModuloAdozione.DoesNotExist):
-        msg = "Errore nella gestione della richiesta"
+        return redirect('home_admin')
+
+@login_required(login_url='login')
+def modifica_animale(request):
+    #controllo se admin
+    if(not(request.user.is_staff)):
+        return redirect('home')
+    try:
+        if(request.method == 'POST'):
+            animale_da_modificare = get_object_or_404(Animale,id=request.POST["animale_id"])
+            context = {
+                'animale_da_modificare' : animale_da_modificare
+            }
+            template = loader.get_template("rifugioAnimali/modifica_animale.html")
+            return HttpResponse(template.render(context,request))
+    except (Animale.DoesNotExist):
         return redirect('home_admin')
     
-    modulo_da_gestire.delete()
-    return redirect('home_admin')
+@login_required(login_url='login')
+def invio_modifica_animale(request):
+    #controllo se admin
+    if(not(request.user.is_staff)):
+        return redirect('home')
+    try:
+        if(request.method == 'POST'):
+            if(request.POST["specie"] == "" or request.POST["razza"] == "" or request.POST["eta"] == "" ):
+                raise KeyError
+             
+            animale_da_modificare = get_object_or_404(Animale,id=request.POST["id"])
+            animale_da_modificare.specie = request.POST["specie"]
+            animale_da_modificare.razza = request.POST["razza"]
+            animale_da_modificare.eta = request.POST["eta"]
+            animale_da_modificare.descrizione = request.POST["descrizione"]
+            animale_da_modificare.full_clean()
+            animale_da_modificare.save()
+            return redirect('gestione_animali')
+    except (Animale.DoesNotExist, KeyError, ValidationError, IntegrityError):
+        return redirect('home_admin')
+    
+    
 
     
 

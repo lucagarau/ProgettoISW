@@ -882,7 +882,66 @@ class TestInvioModificaAnimaleViewTestCase(TestCase):
         self.assertEqual(animaleModificato.descrizione, 'cane di 6 anni')
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('gestione_animali'))
-    
+
+'''
+    Test unitari per la view elimina_animale
+    - Test per verificare che la pagina di eliminazione dell'animale venga caricata correttamente
+    - Test per verificare che l'utente sia loggato
+    - Test per verificare che l'utente sia admin
+    - Test per verificare che l'animale venga eliminato
+'''
+
+class TestEliminaAnimaleViewTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='user', password='user')
+        self.admin = User.objects.create_superuser(username='admin', password='admin',)
+        self.animale = Animale.objects.create(id=101,specie='cane', razza='pastore tedesco', eta=5, descrizione='cane di 5 anni',stato = "ADOTTATO")
+        self.animale2 = Animale.objects.create(id=102,specie='cane', razza='pastore tedesco', eta=5, descrizione='cane di 5 anni',stato = "IN_ATTESA")
+        self.animale3 = Animale.objects.create(id=103,specie='cane', razza='pastore tedesco', eta=5, descrizione='cane di 5 anni',stato = "NON_ADOTTATO")
+
+    def test_elimina_animale_view(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('elimina_animale'), {
+            'animale_id' : 101,
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_elimina_animale_view_not_logged(self):
+        response = self.client.post(reverse('elimina_animale'), {
+            'animale_id' : 101,
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_elimina_animale_view_not_admin(self):
+        self.client.login(username='user', password='user')
+        response = self.client.post(reverse('elimina_animale'), {
+            'animale_id' : 101,
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_elimina_animale_view_animale_eliminato(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('elimina_animale'), {
+            'animale_id' : 101,
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Animale.objects.filter(id=101).exists())
+
+    def test_elimina_animale_view_animale_in_attesa(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('elimina_animale'), {
+            'animale_id' : 102,
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Animale.objects.filter(id=102).exists())
+
+    def test_elimina_animale_view_animale_non_adottato(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('elimina_animale'), {
+            'animale_id' : 103,
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Animale.objects.filter(id=103).exists())
     
 
         

@@ -36,4 +36,5 @@ urlpatterns = [
     path("gestione_modulo_adozione/",views.gestione_modulo_adozione,name="gestione_modulo_adozione"),
     path("modifica_animale/",views.modifica_animale,name="modifica_animale"),
     path("invio_modifica_animale/",views.invio_modifica_animale,name="invio_modifica_animale"),
+    path("elimina_animale/",views.elimina_animale,name="elimina_animale"),
 ]

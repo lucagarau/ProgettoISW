@@ -233,6 +233,20 @@ def invio_modifica_animale(request):
     except (Animale.DoesNotExist, KeyError, ValidationError, IntegrityError):
         return redirect('home_admin')
     
+@login_required(login_url='login')
+def elimina_animale(request):
+    #controllo se admin
+    if(not(request.user.is_staff)):
+        return redirect('home')
+    try:
+        if(request.method == 'POST'):
+            animale_da_eliminare = get_object_or_404(Animale,id=request.POST["animale_id"])
+            if(animale_da_eliminare.stato == "ADOTTATO"):
+                animale_da_eliminare.delete()
+            return redirect('gestione_animali')
+    except (Animale.DoesNotExist):
+        return redirect('home_admin')
+    
     
 
     

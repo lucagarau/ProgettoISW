@@ -117,6 +117,13 @@
                   <input type="hidden" name="animale_id" value="{{ animali.id }}">
                   <input type="submit" class="btn btn-success" value="Modifica">
                 </form>
+                {%if animali.stato == "ADOTTATO"%}
+                <form method="post" action="{% url 'elimina_animale'%}">
+                  {% csrf_token %}
+                  <input type="hidden" name="animale_id" value="{{ animali.id }}">
+                  <input type="submit" class="btn btn-danger" value="Elimina">
+                </form>
+                {% endif %}
               </td>
             </tr>
           {% endfor %}

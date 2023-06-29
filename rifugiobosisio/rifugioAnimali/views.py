@@ -166,7 +166,11 @@ def invio_aggiungi_animale(request):
     
 
     try:
-        if request.POST["specie"] or request.POST["razza"] == "" or request.POST["eta"] == "" :
+        specie = request.POST.get('specie',None)
+        razza = request.POST.get('razza',None)
+        eta = request.POST.get('eta',None)
+        descrizione = request.POST.get('descrizione',None)
+        if (specie is None or razza is None or eta is None or specie == "" or razza == "" or eta == "" or descrizione == ""):
             raise KeyError
         nuovo_animale = Animale(specie = request.POST["specie"],razza = request.POST["razza"],eta = request.POST["eta"],descrizione = request.POST["descrizione"],stato = 'NON_ADOTTATO')
         nuovo_animale.save()
@@ -224,15 +228,21 @@ def invio_modifica_animale(request):
     if(not(request.user.is_staff)):
         return redirect('home')
     try:
+        
         if(request.method == 'POST'):
-            if(str(request.POST["specie"]).strip == "" or str(request.POST["razza"]).strip == "" or str(request.POST["eta"]).strip == "" ):
+            specie = request.POST.get('specie',None)
+            razza = request.POST.get('razza',None)
+            eta = request.POST.get('eta',None)
+            descrizione = request.POST.get('descrizione',None)
+            animale_da_modificare = get_object_or_404(Animale,id=request.POST["id"])
+            
+            if (specie is None or razza is None or eta is None or specie == "" or razza == "" or eta == "" ):
                 raise KeyError
              
-            animale_da_modificare = get_object_or_404(Animale,id=request.POST["id"])
-            animale_da_modificare.specie = request.POST["specie"]
-            animale_da_modificare.razza = request.POST["razza"]
-            animale_da_modificare.eta = request.POST["eta"]
-            animale_da_modificare.descrizione = request.POST["descrizione"]
+            animale_da_modificare.specie = specie
+            animale_da_modificare.razza = razza
+            animale_da_modificare.eta = eta
+            animale_da_modificare.descrizione = descrizione
             animale_da_modificare.full_clean()
             animale_da_modificare.save()
             return redirect('gestione_animali')

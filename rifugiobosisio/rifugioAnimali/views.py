@@ -17,14 +17,20 @@ import sys
 def registerPage(request):
 
     form = CreateUserForm()
+    error_message = ""
 
     if request.method == 'POST':
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
+        if(str(request.POST["first_name"]).strip() != "" and str(request.POST["last_name"]).strip()!= "" and str(request.POST["email"]).strip()!= ""):
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('login')
+        else:
+            error_message =  "Tutti i campi sono obbligatori"
 
-    context = {'form':form}
+
+    context = {'form':form,
+               'error_message':error_message}
     template = loader.get_template("registration/registrazione.html")
     return HttpResponse(template.render(context,request))
 

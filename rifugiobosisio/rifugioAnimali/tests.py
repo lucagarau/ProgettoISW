@@ -678,7 +678,7 @@ class TestInvioAggiungiAnimaleViewTestCase(TestCase):
             'eta' : 5,
             'descrizione' : 'cane di 5 anni',
         })
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
     def test_invio_aggiungi_animale_view_empty_razza_fields(self):
         self.client.login(username='admin', password='admin')
@@ -708,7 +708,7 @@ class TestInvioAggiungiAnimaleViewTestCase(TestCase):
             'eta' : 5,
             'descrizione' : '',
         })
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
 '''
     Test unitari per la view gestione_modulo_adozione

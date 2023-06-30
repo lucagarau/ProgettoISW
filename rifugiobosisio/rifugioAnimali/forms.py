@@ -9,12 +9,12 @@ class CreateUserForm(UserCreationForm):
         model = User
         fields = ['first_name','last_name','username','email','password1','password2']
         labels = {
-            'first_name': _('Nome'),
-            'last_name': _('Cognome'),
-            'username': _('Username'),
-            'email': _('Email'),
-            'password1': _('Password'),
-            'password2': _('Conferma Password'),
+            'first_name': _('Nome*'),
+            'last_name': _('Cognome*'),
+            'username': _('Username*'),
+            'email': _('Email*'),
+            'password1': _('Password*'),
+            'password2': _('Conferma Password*'),
         }
         widgets = {
             'first_name': forms.TextInput(attrs={'class':'form-control me-2'}),

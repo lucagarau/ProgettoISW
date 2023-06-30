@@ -58,6 +58,16 @@ class TestAccetazioneLogin(LiveServerTestCase):
         self.driver.find_element("id","Logout").click()
         time.sleep(5)
 
+    def test_login_errore(self):
+        self.driver.get(self.live_server_url + "/login/")
+        loginBox = self.driver.find_element("id","acc_nomeUtente")
+        loginBox.send_keys("admin")
+        passwordBox = self.driver.find_element("id","psw")
+        passwordBox.send_keys("admin1")
+        passwordBox.send_keys(Keys.ENTER)
+        time.sleep(5)
+
+
 '''
     Test di accettazione per la pagina di registrazione
     - test_registrazione_utente: testa la registrazione di un utente

@@ -74,6 +74,10 @@ def logIn(request):
         
         user = authenticate(request, username=usr, password=psw)
 
+        if user is None:
+            template = loader.get_template("registration/login.html")
+            return HttpResponse(template.render({"error_message":"Username o password errati"},request))
+
         if user is not None and not(user.is_staff):
             login(request, user)
             return redirect('home')

@@ -1,7 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from django.core.exceptions import ValidationError
+from .models import *
+from django.test import LiveServerTestCase
+from django.test import Client
+from django.contrib.auth.models import User
 import time
 
 def testLoginAdmin():
@@ -435,9 +438,38 @@ def testLogout():
     driver.find_element("id","Logout").click()
     time.sleep(5)
 
+class TestAccetazione(LiveServerTestCase):
+    def setUp(self):
+        super().setUp()
+        self.driver = webdriver.Chrome()
+        Animale.objects.create(id=101,specie="gatto",razza="siamese",eta=12,descrizione="gatto molto violento",stato = "NON_ADOTTATO")
+        User.objects.create_user(username="user",password="Ciaociao1!")
+        
+    def tearDown(self):
+        self.driver.quit()
+        super().tearDown()
+        
+
+    def testLogin(self):
+        self.driver.get(self.live_server_url + "/login/")
+
+        time.sleep(2)
+
+        loginBox = self.driver.find_element("id","acc_nomeUtente")
+        loginBox.send_keys("user")
+
+        passwordBox = self.driver.find_element("id","psw")
+        passwordBox.send_keys("Ciaociao1!")
+
+        passwordBox.send_keys(Keys.ENTER)
+        time.sleep(2)
+
+        assert "siamese" in self.driver.page_source
 
 
-if __name__ == "__main__":
+
+
+#if __name__ == "__main__":
     #testLoginAdmin()
     #testLoginUser()
     #testRegistrazioneUtenteErrore()
@@ -453,4 +485,4 @@ if __name__ == "__main__":
     #testEliminaAnimale()
     #testAggiungiAnimale()
     #testAggiungiAnimaleErrore()
-    testLogout()
+    #testLogout()

@@ -17,15 +17,15 @@
                     <fieldset>
                     {% if error_message %} <p><strong>{{error_message}}</strong></p> {% endif %}
                 <div class="form-group">
-                    <label for="adotta_nome">Specie:</label>
+                    <label for="adotta_nome">Specie:<a style="color: red;"> *</a></label>
                     <input type="text" class="form-control" name="specie" id="specie" placeholder="Specie" />
                 </div>
                 <div class="form-group">
-                    <label for="adotta_indirizzo">Razza:</label>
+                    <label for="adotta_indirizzo">Razza:<a style="color: red;"> *</a></label>
                     <input type="text" class="form-control" name="razza" id="razza" placeholder="Razza" />
                 </div>
                 <div class="form-group">
-                    <label for="adotta_recapito">Età:</label>
+                    <label for="adotta_recapito">Età:<a style="color: red;"> *</a></label>
                     <input type="number" class="form-control" name="eta" id="eta" placeholder="Età" default="0" />
                 </div>
                 <div class="form-group">

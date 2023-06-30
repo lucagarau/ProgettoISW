@@ -21,15 +21,15 @@
                 <input type="hidden" name="id" value="{{animale_da_modificare.id}}">  
               {% if error_message %} <p><strong>{{error_message}}</strong></p> {% endif %}
             <div class="form-group">
-              <label for="specie">Specie:</label>
+              <label for="specie">Specie:<a style="color: red;"> *</a></label>
               <input type="text" class="form-control" id="specie" name="specie" placeholder="Specie" value="{{animale_da_modificare.specie}}">
             </div>
             <div class="form-group">
-              <label for="razza">Razza:</label>
+              <label for="razza">Razza:<a style="color: red;"> *</a></label>
               <input type="text" class="form-control" id="razza" name="razza" placeholder="Razza" value="{{animale_da_modificare.razza}}">
             </div>
             <div class="form-group">
-              <label for="eta">Età:</label>
+              <label for="eta">Età:<a style="color: red;"> *</a></label>
               <input type="text" class="form-control" id="eta" name = "eta"placeholder="Età" value = "{{animale_da_modificare.eta}}">
             </div>
             <div class="form-group">

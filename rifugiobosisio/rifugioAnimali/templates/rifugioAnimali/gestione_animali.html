@@ -61,6 +61,18 @@
     <div class="row align-items-center">
       <div class="col"> <!--Prima colonna-->
         
+        <!--Tasto Filtra-->
+        <div class="align-items-center btn-group">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="filtra">Filtra</button>
+          <ul class="dropdown-menu" style="min-width:300px;">
+            <form method="get" id = "filter-form">
+              {{ lista_filtrata.form.as_ul }}
+              <input type="submit" class ="btn btn-outline-success"/>
+            </form>
+          </ul>
+        </div>
+
+      </div>
       <div class="col-9 text-center"> <!--Seconda colonna-->
         <!--Titolo Pagina-->
         <h2 class="">Lista degli animali del rifugio</h2>
@@ -71,16 +83,7 @@
     </div>
   </div>
 
-  <!--Tasto Filtra-->
-  <div class="align-items-center btn-group">
-    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="filtra">Filtra</button>
-    <ul class="dropdown-menu" style="min-width:300px;">
-      <form method="get" id = "filter-form">
-        {{ lista_filtrata.form.as_ul }}
-        <input type="submit" class ="btn btn-outline-success"/>
-      </form>
-    </ul>
-  </div>
+  
 
   <!--Testo avviso Centrato-->
   <div class="row">

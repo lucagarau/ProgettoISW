@@ -26,15 +26,15 @@
               <fieldset>
               {% if error_message %} <p><strong>{{error_message}}</strong></p> {% endif %}
             <div class="form-group">
-              <label for="adotta_nome">Nome e Cognome:</label>
+              <label for="adotta_nome">Nome e Cognome:<a style="color: red;"> *</a></label>
               <input type="text" class="form-control" id="adotta_nome" name="nomeCognome" placeholder="Nome e Cognome">
             </div>
             <div class="form-group">
-              <label for="adotta_indirizzo">Indirizzo:</label>
+              <label for="adotta_indirizzo">Indirizzo:<a style="color: red;"> *</a></label>
               <input type="text" class="form-control" id="adotta_indirizzo" name="indirizzo" placeholder="Indirizzo">
             </div>
             <div class="form-group">
-              <label for="adotta_recapito">Recapito:</label>
+              <label for="adotta_recapito">Recapito:<a style="color: red;"> *</a></label>
               <input type="text" class="form-control" id="adotta_recapito" name = "recapito"placeholder="Email o Telefono">
             </div>
             <div class="form-group text-center">

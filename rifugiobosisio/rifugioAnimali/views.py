@@ -170,7 +170,7 @@ def invio_aggiungi_animale(request):
         razza = request.POST.get('razza',None)
         eta = request.POST.get('eta',None)
         descrizione = request.POST.get('descrizione',None)
-        if (specie is None or razza is None or eta is None or specie == "" or razza == "" or eta == "" or descrizione == ""):
+        if (specie is None or razza is None or eta is None or specie == "" or razza == "" or eta == ""):
             raise KeyError
         nuovo_animale = Animale(specie = request.POST["specie"],razza = request.POST["razza"],eta = request.POST["eta"],descrizione = request.POST["descrizione"],stato = 'NON_ADOTTATO')
         nuovo_animale.save()

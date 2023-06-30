@@ -50,7 +50,7 @@
         <h2 class="text-center">Lista Richieste</h2>
       </div>
       <div class="col"> <!--Terza colonna-->
-        <a href="#" role="button" class="btn btn-warning m-3" onclick="location.href= '/gestione_animali/' ">Gestisci Animali</a>
+        <a href="#" role="button" class="btn btn-warning m-3" onclick="location.href= '/gestione_animali/' " id="gestione_animali">Gestisci Animali</a>
       </div>
     </div>
   </div>
@@ -92,14 +92,14 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="modulo_id" value="{{ modulo_adozione.id }}">
                                 <input type="hidden" name="stato" value="accetta">
-                                <input type="submit" class="btn btn-outline-success" value="Accetta">
+                                <input type="submit" class="btn btn-outline-success" value="Accetta" id="acc_{{modulo_adozione.id}}">
                               </form>
 
                               <form method="post" action="{% url 'gestione_modulo_adozione' %}">
                                 {% csrf_token %}
                                 <input type="hidden" name="modulo_id" value="{{ modulo_adozione.id }}">
                                 <input type="hidden" name="stato" value="rifiuta">
-                                <input type="submit" class="btn btn-outline-danger" value="Rifiuta">
+                                <input type="submit" class="btn btn-outline-danger" value="Rifiuta" id="rif_{{modulo_adozione.id}}">
                               </form>
                             </td> 
                             

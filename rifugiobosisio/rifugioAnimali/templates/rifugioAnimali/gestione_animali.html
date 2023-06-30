@@ -66,7 +66,7 @@
         <h2 class="">Lista degli animali del rifugio</h2>
       </div>
       <div class="col"> <!--Terza colonna-->
-        <a href="#" role="button" class="btn btn-success" onclick="location.href= '/aggiungi_animale' ">Aggiungi un animale</a>
+        <a href="#" role="button" class="btn btn-success" onclick="location.href= '/aggiungi_animale' " id="aggiungi">Aggiungi un animale</a>
       </div>
     </div>
   </div>
@@ -115,13 +115,13 @@
                 <form method="post" action="{% url 'modifica_animale'%}">
                   {% csrf_token %}
                   <input type="hidden" name="animale_id" value="{{ animali.id }}">
-                  <input type="submit" class="btn btn-success" value="Modifica">
+                  <input type="submit" class="btn btn-success" value="Modifica" id="mod_{{animali.id}}">
                 </form>
                 {%if animali.stato == "ADOTTATO"%}
                 <form method="post" action="{% url 'elimina_animale'%}">
                   {% csrf_token %}
                   <input type="hidden" name="animale_id" value="{{ animali.id }}">
-                  <input type="submit" class="btn btn-danger" value="Elimina">
+                  <input type="submit" class="btn btn-danger" value="Elimina" id="elim_{{animali.id}}">
                 </form>
                 {% endif %}
               </td>
